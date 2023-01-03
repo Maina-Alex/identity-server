@@ -19,7 +19,7 @@
     }
 
      class Channel {
-     -  id: long
+      -  id: long
       - channelId : String
       - channelSecret : String
       - channelAccessTokenValidity : Integer
