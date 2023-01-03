@@ -1,6 +1,10 @@
 package com.lexDev.identityserver.model;
 
+import com.lexDev.identityserver.constant.UsernameType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 @AllArgsConstructor
@@ -10,16 +14,17 @@ import lombok.*;
 @Getter
 @Setter
 public class Channel extends BaseEntity{
+    private String channelId;
+    private String channelSecret;
     /**
-     * -  id: long
-     *       - channelId : String
-     *       - channelSecret : String
-     *       - channelAccessTokenValidity : Integer
-     *       - channelRefreshTokenValidity : Integer
-     *       - firstTimeLoginTokenValidity : Integer
-     *       - parentChannel : Channel
-     *       - canValidateToken: boolean
-     *       - usernameType: UsernameType
+     * Access Token validity in seconds
      */
-    private long id
+    private int accessTokenValidity;
+    private int refreshTokenValidity;
+    private int firstTimeLoginTokenValidity;
+    @Enumerated(EnumType.STRING)
+    private UsernameType usernameType;
+    @ManyToOne
+    private Channel sharedChannel;
+    private boolean canValidateToken=false;
 }
