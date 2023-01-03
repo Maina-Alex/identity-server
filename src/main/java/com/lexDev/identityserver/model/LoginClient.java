@@ -9,10 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Client extends BaseEntity {
-    private String preferredName;
-    private String email;
-    private String tel;
+public class LoginClient extends BaseEntity {
     private String username;
     private boolean deleted;
 

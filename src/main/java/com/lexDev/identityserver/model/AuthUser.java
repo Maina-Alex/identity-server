@@ -11,9 +11,8 @@ import lombok.*;
 @Getter
 @Setter
 public class AuthUser extends BaseEntity{
-    private String channelId;
     @ManyToOne
-    private Client client;
+    private LoginClient loginClient;
     @ManyToOne
     private Channel channel;
     private String password;

@@ -27,4 +27,5 @@ public class Channel extends BaseEntity{
     @ManyToOne
     private Channel sharedChannel;
     private boolean canValidateToken=false;
+    private boolean canRegisterUser=false;
 }
