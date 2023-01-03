@@ -1,0 +1,79 @@
+@startuml
+!define DARKORANGE
+!includeurl https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
+
+     class User{
+     -  id : long
+      - prefferedName : String
+      - email : String
+      - phone : String
+      - username: String
+      - blocked : boolean
+      - createdOn: Date
+     }
+
+    enum UsernameType{
+      EMAIL_AUTH_TYPE,
+      PHONE_AUTH_TYPE,
+      USERNAME_AUTH_TYPE
+    }
+
+     class Channel {
+     -  id: long
+      - channelId : String
+      - channelSecret : String
+      - channelAccessTokenValidity : Integer
+      - channelRefreshTokenValidity : Integer
+      - firstTimeLoginTokenValidity : Integer
+      - parentChannel : Channel
+      - canValidateToken: boolean
+      - usernameType: UsernameType
+     }
+
+     note left
+      A channel can
+      share Authentication users
+      from another  Channel
+     end note
+
+     class AuthUsers {
+       - id: long
+       - channelId : String
+       - userId : String
+       - username : String
+       - password : String
+       - blocked : boolean
+       - deleted: boolean
+       - firstTimeLogin: boolean
+     }
+
+     interface UserActivity{
+       + registerUser(userDto: UserDto)
+       + blockUser(userDto: UserDto)
+       + unblockUser(userDto: UserDto)
+       + deleteUser((userDto: UserDto)
+       + getUserAuthenticationLog(startDateTime: DateTime, endDateTime DateTime)
+       + resetUserPassword(passwordDto: PasswordDto)
+       + updateUserPassword(passwordDto: PasswordDto)
+     }
+
+     interface ChannelActivity{
+     +  registerChannel( channelDto: ChannelDto)
+     +  disableChannel ( channelDto: ChannelDto))
+     +  deleteChannel ( channelDto: ChannelDto)
+     +  getChannels (pageDto: PageDto)
+     }
+
+     interface AuthenticationActivity{
+       + authenticateUser(authenticationPayload: AuthenticationPayload)
+       + validateToken(tokenValidationPayload: TokenValidationPayload)
+       + logoutUser(logoutDto: LogOutDto)
+     }
+
+     interface IAuthenticationProvider{
+       + authenticateUser()
+       - onSuccessfulAuthentication()
+       - onFailedAuthentication()
+     }
+
+@enduml

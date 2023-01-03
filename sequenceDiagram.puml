@@ -1,0 +1,42 @@
+@startuml
+!define DARKBLUE
+'!includeurl https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
+
+ actor "web user" as webuser
+ participant "front end" as Portal
+ participant Gateway
+ participant "Identity Server" as identityServer
+ participant "Rest Api " as RestAPI
+ database orderDatabase
+ entity "External \nShipping Service" as ExternalShippingService
+
+ autonumber
+ webuser-> Portal ++ : Orders Request
+ group Step: Authentication
+ Portal-> Gateway ++ : GET /api/v1/orders\n Bearer Token
+ Gateway -> identityServer ++: Authentication Token
+ Portal -> webuser -- : Response
+ identityServer-> identityServer: Validate\nToken
+ identityServer -[#green]> Gateway  : Success, Token validated
+ else Authentication Failed
+ autonumber 6
+  identityServer-[#red]> Gateway -- : Request Failed
+  Gateway-> Portal: Request Failed
+  Portal-> webuser: Login Again
+  note right : Authentication has failed
+ end
+
+ group call Order Api
+ Gateway -> RestAPI ++ : GET api/v1/orders
+ RestAPI -> RestAPI : Do some\n processing
+ group Database interaction
+ RestAPI -> orderDatabase ++ : Query Database
+ orderDatabase -> RestAPI -- : orders
+ end
+ loop Find shipping status
+  RestAPI -> ExternalShippingService ++ : Find Shipping status
+  ExternalShippingService -> RestAPI -- : Return Response
+ end
+
+ RestAPI -> Portal -- : Orders
+@enduml
